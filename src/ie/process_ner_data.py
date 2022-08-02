@@ -82,12 +82,11 @@ def transform(slots, text):
         if v == "":
             if label == "":
                 continue
-            else:
-                print("bad transform:")
-                print("original: " + labels + "\t" + text)
-                print("next text: " + " ".join(new_text))
-                print("new labels: " + " ".join(new_labels))
-                exit(1)
+            print("bad transform:")
+            print(f"original: {labels}" + "\t" + text)
+            print("next text: " + " ".join(new_text))
+            print("new labels: " + " ".join(new_labels))
+            exit(1)
         if i > 0:
             text += " "
         if label == "":
@@ -106,7 +105,7 @@ def transform(slots, text):
 def main(input_file, train_file, test_file):
     samples = set()
     trials = set()
-    histo = dict()
+    histo = {}
     line_cnt = 0
     slot_cnt = 0
     train_cnt = 0

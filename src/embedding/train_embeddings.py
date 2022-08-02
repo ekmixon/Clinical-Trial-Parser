@@ -20,9 +20,7 @@ from text.transformer import Transformer
 def similarity(v1, v2):
     n1 = np.linalg.norm(v1)
     n2 = np.linalg.norm(v2)
-    if n1 < param.EPS or n2 < param.EPS:
-        return 0
-    return np.dot(v1, v2) / (n1 * n2)
+    return 0 if n1 < param.EPS or n2 < param.EPS else np.dot(v1, v2) / (n1 * n2)
 
 
 def parse_args():
@@ -63,16 +61,15 @@ def train_embeddings(input_file, output_file):
     model = fasttext.train_unsupervised(input_file, **param.options)
     model.save_model(output_file + param.BIN)
 
-    word_writer = open(output_file + param.FREQ, "w", encoding="utf-8")
-    vec_writer = open(output_file + param.VEC, "w", encoding="utf-8")
+    with open(output_file + param.FREQ, "w", encoding="utf-8") as word_writer:
+        vec_writer = open(output_file + param.VEC, "w", encoding="utf-8")
 
-    words, freqs = model.get_words(include_freq=True)
-    for w, f in zip(words, freqs):
-        word_writer.write(f"{w} {f:d}\n")
-        vec = " ".join(format(v, ".6f") for v in model.get_word_vector(w))
-        vec_writer.write(f"{w} {vec}\n")
+        words, freqs = model.get_words(include_freq=True)
+        for w, f in zip(words, freqs):
+            word_writer.write(f"{w} {f:d}\n")
+            vec = " ".join(format(v, ".6f") for v in model.get_word_vector(w))
+            vec_writer.write(f"{w} {vec}\n")
 
-    word_writer.close()
     vec_writer.close()
 
 

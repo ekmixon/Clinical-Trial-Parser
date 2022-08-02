@@ -68,11 +68,10 @@ class OfflinePredictor:
         workspace.FeedBlob("tokens_lens", tokens_lens)
 
         workspace.RunNet(self.predict_net)
-        prediction = {
+        return {
             str(blob): workspace.blobs[blob]
             for blob in self.predict_net.external_outputs
         }
-        return prediction
 
 
 def predictions_by_word(predictions, split_prediction_text):
@@ -83,8 +82,9 @@ def predictions_by_word(predictions, split_prediction_text):
             for label, value_array in predictions.items()
         ]
         exps_sum = sum(
-            [np.exp(prediction["score"]) for prediction in predictions_by_label]
+            np.exp(prediction["score"]) for prediction in predictions_by_label
         )
+
         soft_maxed_predictions_by_label = [
             {
                 "score": np.exp(prediction["score"]) / exps_sum,

@@ -69,8 +69,7 @@ class Transformer:
 
     def tokenize(self, text):
         text = self.normalizer.normalize(text)
-        tokens = self.tokenizer.tokenize(text)
-        return tokens
+        return self.tokenizer.tokenize(text)
 
     def transform(self, text):
         tokens = self.tokenize(text)
